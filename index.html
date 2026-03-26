@@ -6,18 +6,15 @@
     <title>NEZO | Digital Universe</title>
     <style>
         :root {
-            --accent: #00f2ff; /* Neon Mavi */
-            --main-red: #ff0055; /* Canlı Pembe-Kırmızı */
+            --accent: #00f2ff;
+            --main-red: #ff0055;
             --bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.08);
         }
 
         body {
             background: radial-gradient(circle at center, #111 0%, #050505 100%);
-            color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            overflow-x: hidden;
+            color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden;
         }
 
         /* --- ÖZGÜN NEZO INTRO --- */
@@ -27,86 +24,71 @@
             z-index: 2000; transition: 1s ease-in-out;
         }
         .ring {
-            width: 150px; height: 150px; border: 3px solid transparent;
-            border-top: 3px solid var(--accent); border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-            position: absolute;
+            width: 120px; height: 120px; border: 2px solid transparent;
+            border-top: 2px solid var(--accent); border-radius: 50%;
+            animation: spin 1s linear infinite; position: absolute;
         }
         .intro-text {
-            font-size: 50px; font-weight: 900; letter-spacing: 10px;
+            font-size: 40px; font-weight: 900; letter-spacing: 8px;
             background: linear-gradient(45deg, var(--main-red), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: pulse 2s ease-in-out forwards;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0; letter-spacing: 20px; }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; letter-spacing: 5px; }
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
         .fade-away { opacity: 0; visibility: hidden; }
 
-        /* --- MODERN NAVBAR --- */
+        /* --- NAVBAR --- */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 40px; background: var(--glass);
-            backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%;
-            z-index: 1000; box-sizing: border-box; border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 25px; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(15px); position: fixed; top: 0; width: 100%;
+            z-index: 1000; box-sizing: border-box; border-bottom: 1px solid rgba(0, 242, 255, 0.2);
         }
         .logo-text {
-            font-size: 30px; font-weight: bold; background: linear-gradient(to right, var(--main-red), #fff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 26px; font-weight: 900; color: white;
+            text-shadow: 0 0 10px var(--main-red);
         }
 
-        /* --- PLAYER --- */
-        .content-wrap { margin-top: 100px; padding: 20px; }
+        /* --- CONTENT --- */
+        .content-wrap { margin-top: 90px; padding: 15px; }
         #player-box { 
             display: none; background: var(--glass); border-radius: 20px;
-            padding: 10px; border: 1px solid rgba(0, 242, 255, 0.3);
-            margin-bottom: 40px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            padding: 15px; border: 1px solid rgba(0, 242, 255, 0.2);
+            margin-bottom: 30px; animation: slideDown 0.5s ease;
         }
-        video { width: 100%; border-radius: 15px; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        video { width: 100%; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
 
-        /* --- ÖZGÜN KATALOG TASARIMI --- */
         .section-title { 
-            font-size: 24px; margin: 30px 0 15px; display: flex; align-items: center;
-            text-transform: uppercase; letter-spacing: 2px;
+            font-size: 20px; margin: 25px 0 15px; color: #fff;
+            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center;
         }
         .section-title::before {
-            content: ""; width: 5px; height: 25px; background: var(--accent);
-            margin-right: 15px; border-radius: 5px; box-shadow: 0 0 10px var(--accent);
+            content: ""; width: 4px; height: 20px; background: var(--accent);
+            margin-right: 12px; box-shadow: 0 0 8px var(--accent);
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        /* --- GRID & CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); } }
         
         .nezo-card {
-            position: relative; border-radius: 15px; overflow: hidden;
-            background: #111; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid transparent;
+            position: relative; border-radius: 12px; overflow: hidden;
+            background: #111; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
         }
-        .nezo-card:hover {
-            transform: translateY(-10px); border-color: var(--accent);
-            box-shadow: 0 10px 25px rgba(0, 242, 255, 0.2);
-        }
-        .nezo-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; }
-        .nezo-card:hover img { filter: brightness(0.4) blur(2px); }
+        .nezo-card:active { transform: scale(0.95); }
+        .nezo-card img { width: 100%; height: 220px; object-fit: cover; }
         
-        .card-info {
-            position: absolute; bottom: -50px; left: 0; width: 100%;
-            padding: 15px; background: linear-gradient(transparent, #000);
-            transition: 0.3s; opacity: 0; box-sizing: border-box;
+        .card-overlay {
+            position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 10px;
         }
-        .nezo-card:hover .card-info { bottom: 0; opacity: 1; }
-        .play-btn {
-            background: var(--accent); color: #000; border: none;
-            padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer;
-        }
-
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .navbar { padding: 15px; }
-            .logo-text { font-size: 22px; }
-        }
+        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .play-small { background: var(--accent); color: #000; border: none; border-radius: 4px; font-size: 10px; padding: 4px 8px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -118,13 +100,13 @@
 
     <nav class="navbar">
         <div class="logo-text">NEZO</div>
-        <div style="font-size: 0.8rem; color: var(--accent);">PREMIUM UNIVERSE</div>
+        <div style="font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 4px;">PREMIUM</div>
     </nav>
 
     <div class="content-wrap">
         <div id="player-box">
-            <h2 id="p-title" style="margin-top:0; color: var(--accent);"></h2>
-            <video id="v-player" controls></video>
+            <h2 id="p-title" style="margin: 0 0 10px 0; font-size: 18px; color: var(--accent);"></h2>
+            <video id="v-player" controls poster="https://i.ibb.co/6P2CkzN/loading.gif"></video>
         </div>
 
         <div class="section-title">Trendler</div>
@@ -135,29 +117,30 @@
     </div>
 
     <script>
-        // Film Verileri
         const movies = {
             popular: [
-                { t: 'Prison Break', d: 'Kaçış sanatı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/u9Y6G5f9B5T7H0o8Xo0lY7oX6nS.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-                { t: 'Bleach', d: 'Ruhların savaşı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/367Tf0G5XJvV8M2K2M6fK6fG6fG.jpg', url: 'https://www.w3schools.com/html/movie.mp4' },
-                { t: 'The Witcher', d: 'Canavar avcısı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7vUveX54CgU1q6Cq74q3G3Fm6F1.jpg', url: '' }
+                { t: 'Prison Break', img: 'https://image.tmdb.org/t/p/w500/u9Y6G5f9B5T7H0o8Xo0lY7oX6nS.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { t: 'Bleach', img: 'https://image.tmdb.org/t/p/w500/367Tf0G5XJvV8M2K2M6fK6fG6fG.jpg', url: 'https://www.w3schools.com/html/movie.mp4' },
+                { t: 'The Witcher', img: 'https://image.tmdb.org/t/p/w500/7vUveX54CgU1q6Cq74q3G3Fm6F1.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { t: 'Breaking Bad', img: 'https://image.tmdb.org/t/p/w500/ztY5UiswzG8uVjP4uKk3UjA0fF1.jpg', url: 'https://www.w3schools.com/html/movie.mp4' }
             ],
             horror: [
-                { t: 'The Conjuring', d: 'Korku seansı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/wS4kH5G0VzD6iE1T9U0p6S5mF7G.jpg', url: '' },
-                { t: 'IT', d: 'O geri döndü.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9E2D8hM52O2Z7r1t9H1E7k2N4p9.jpg', url: '' }
+                { t: 'The Conjuring', img: 'https://image.tmdb.org/t/p/w500/wS4kH5G0VzD6iE1T9U0p6S5mF7G.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { t: 'IT', img: 'https://image.tmdb.org/t/p/w500/9E2D8hM52O2Z7r1t9H1E7k2N4p9.jpg', url: 'https://www.w3schools.com/html/movie.mp4' },
+                { t: 'Halloween', img: 'https://image.tmdb.org/t/p/w500/8gXmH8W5L3v6qC8Z5J7m6T6V2U6.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { t: 'A Quiet Place', img: 'https://image.tmdb.org/t/p/w500/yvOOp9Q4U5Y5M6v8Wf6Kj3Z4D1F.jpg', url: 'https://www.w3schools.com/html/movie.mp4' }
             ]
         };
 
-        // Katalog Oluşturma
-        function createGrid(data, containerId) {
-            const container = document.getElementById(containerId);
+        function populate(data, id) {
+            const el = document.getElementById(id);
             data.forEach(m => {
-                container.innerHTML += `
+                el.innerHTML += `
                     <div class="nezo-card" onclick="startPlay('${m.t}', '${m.url}')">
-                        <img src="${m.img}" alt="${m.t}">
-                        <div class="card-info">
-                            <div style="font-weight:bold; margin-bottom:5px;">${m.t}</div>
-                            <button class="play-btn">İzle</button>
+                        <img src="${m.img}">
+                        <div class="card-overlay">
+                            <div class="card-title">${m.t}</div>
+                            <div><button class="play-small">HEMEN İZLE</button></div>
                         </div>
                     </div>
                 `;
@@ -165,23 +148,19 @@
         }
 
         function startPlay(title, url) {
-            if(!url) return alert("Bu içerik yakında eklenecek!");
-            document.getElementById('player-box').style.display = 'block';
+            const box = document.getElementById('player-box');
+            box.style.display = 'block';
             document.getElementById('p-title').innerText = title;
             const v = document.getElementById('v-player');
             v.src = url;
             v.play();
-            window.scrollTo({top: 80, behavior: 'smooth'});
+            window.scrollTo({top: 70, behavior: 'smooth'});
         }
 
-        // Başlangıç
         window.onload = () => {
-            createGrid(movies.popular, 'popular-grid');
-            createGrid(movies.horror, 'horror-grid');
-            
-            setTimeout(() => {
-                document.getElementById('nezo-intro').classList.add('fade-away');
-            }, 3500);
+            populate(movies.popular, 'popular-grid');
+            populate(movies.horror, 'horror-grid');
+            setTimeout(() => document.getElementById('nezo-intro').classList.add('fade-away'), 2500);
         };
     </script>
 </body>
