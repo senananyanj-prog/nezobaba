@@ -3,212 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nezo Baba | Film & Dizi Dünyası</title>
+    <title>Nezo Baba | Film ve Dizi</title>
     <style>
-        /* Modern ve temiz CSS */
-        :root {
-            --main-red: #e50914;
-            --dark-bg: #141414;
-            --card-bg: #1f1f1f;
-            --text-color: white;
-            --sub-text: #b3b3b3;
-        }
-
-        /* Başlangıçta ekranın gizlenmesi için */
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            opacity: 0; /* JS ile açılacak */
-        }
-
-        /* 1. GİRİŞ ANİMASYONU: EKRANIN AÇILMASI */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animated-entry {
-            animation: fadeIn 1s ease-out forwards;
-        }
-
-        header {
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(0,0,0,0.85);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            color: var(--main-red);
-            font-size: 2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 0.9rem;
-        }
-
-        nav a:hover {
-            color: var(--main-red);
-        }
-
-        .container {
-            padding: 40px 5%;
-        }
-
-        .section-title {
-            margin-bottom: 30px;
-            font-size: 1.6rem;
-            font-weight: 700;
-            border-left: 5px solid var(--main-red);
-            padding-left: 15px;
-        }
-
-        /* 2. KARAKTER DÜZELTMESİ: TÜRKÇE KARAKTERLER */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px;
-        }
-
-        /* 3. FOTOĞRAF VE KART İYİLEŞTİRMELERİ */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-        }
-
-        .card img {
-            width: 100%;
-            height: 320px;
-            object-fit: cover;
-            border-bottom: 1px solid #333;
-        }
-
-        .card-content {
-            padding: 15px;
-        }
-
-        .content-type {
-            font-size: 0.75rem;
-            color: var(--main-red);
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .title {
-            font-size: 1.1rem;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        .lang-options {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 8px;
-            font-size: 0.8rem;
-            border: 1px solid #444;
-            background: transparent;
-            color: var(--sub-text);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn:hover {
-            border-color: #e50914;
-            color: white;
-        }
-
-        .btn.active {
-            background-color: var(--main-red);
-            border-color: var(--main-red);
-            color: white;
-        }
+        body { background-color: #141414; color: white; font-family: 'Arial', sans-serif; margin: 0; opacity: 0; animation: fadeIn 1.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        header { padding: 20px 5%; background: rgba(0,0,0,0.9); display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e50914; }
+        .logo { color: #e50914; font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        .container { padding: 40px 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; }
+        .card { background: #1f1f1f; border-radius: 8px; overflow: hidden; transition: 0.3s; }
+        .card:hover { transform: scale(1.05); }
+        .card img { width: 100%; height: 300px; object-fit: cover; }
+        .p-10 { padding: 15px; }
+        .btn { background: #e50914; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-
-<header>
-    <div class="logo">NEZO BABA</div>
-    <nav>
-        <a href="#">Film</a>
-        <a href="#">Dizi</a>
-        <a href="#">Anime</a>
-        <a href="#">Favorilerim</a>
-    </nav>
-</header>
-
-<div class="container">
-    <h2 class="section-title">Popüler Film ve Diziler</h2>
-    <div class="grid" id="mainGrid">
-        </div>
-</div>
-
-<script>
-    // 4. GERÇEK FOTOĞRAF VE VERİ ENTEGRASYONU
-    const icerikler = [
-        { id: 1, isim: "Inception", tip: "FİLM", resim: "https://image.tmdb.org/t/p/w500/9gk7Fn9sVAsS9696G1o3oIx9YvA.jpg" },
-        { id: 2, isim: "Breaking Bad", tip: "DİZİ", resim: "https://image.tmdb.org/t/p/w500/ggFHUX9ygvsY7Y0ulWvC9O90Iqc.jpg" },
-        { id: 3, isim: "The Dark Knight", tip: "FİLM", resim: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDp9QEQVvCjGXmHqhiG.jpg" },
-        { id: 4, isim: "Stranger Things", tip: "DİZİ", resim: "https://image.tmdb.org/t/p/w500/x2LSRt2sC8vPGSI69sJ3097DTCC.jpg" },
-        { id: 5, isim: "Interstellar", tip: "FİLM", resim: "https://image.tmdb.org/t/p/w500/gEU2QniE6EwfVnz6u2pluRTQ9T6.jpg" },
-        { id: 6, isim: "The Witcher", tip: "DİZİ", resim: "https://image.tmdb.org/t/p/w500/7vjaOntSjSTC9u8SFOEa2p9hBhH.jpg" }
-    ];
-
-    const grid = document.getElementById('mainGrid');
-
-    icerikler.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <img src="${item.resim}" alt="${item.isim}">
-            <div class="card-content">
-                <div class="content-type">${item.tip}</div>
-                <div class="title">${item.isim}</div>
-                <div class="lang-options">
-                    <button class="btn active" onclick="setLang(this)">TR Dublaj</button>
-                    <button class="btn" onclick="setLang(this)">TR Altyazı</button>
-                </div>
+    <header><div class="logo">NEZO BABA</div></header>
+    <div class="container">
+        <h2 style="border-left: 4px solid #e50914; padding-left: 10px;">Popüler İçerikler</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://image.tmdb.org/t/p/w500/9gk7Fn9sVAsS9696G1o3oIx9YvA.jpg">
+                <div class="p-10"><div>Inception</div><button class="btn">İzle</button></div>
             </div>
-        `;
-        grid.appendChild(card);
-    });
-
-    function setLang(btn) {
-        // Butonlar arası aktiflik geçişi
-        const parent = btn.parentElement;
-        parent.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    // GİRİŞ ANİMASYONUNU TETİKLEME
-    window.onload = function() {
-        document.body.classList.add('animated-entry');
-    };
-</script>
-
+            <div class="card">
+                <img src="https://image.tmdb.org/t/p/w500/ggFHUX9ygvsY7Y0ulWvC9O90Iqc.jpg">
+                <div class="p-10"><div>Breaking Bad</div><button class="btn">İzle</button></div>
+            </div>
+            <div class="card">
+                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDp9QEQVvCjGXmHqhiG.jpg">
+                <div class="p-10"><div>The Dark Knight</div><button class="btn">İzle</button></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
