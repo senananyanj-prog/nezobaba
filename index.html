@@ -5,81 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NEZO | Premium Universe</title>
     <style>
-        :root {
-            --accent: #00f2ff; /* Görseldeki Neon Turkuaz */
-            --bg: #020205; /* Koyu Lacivert/Mor Geçişi İçin Temel */
-            --card-bg: rgba(255, 255, 255, 0.03);
+        :root { --accent: #00f2ff; --bg: #020205; }
+        body { 
+            background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #020205 100%); 
+            color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 50px; overflow-x: hidden;
         }
 
-        body {
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #020205 100%);
-            color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden;
+        /* --- HAVALI GİRİŞ EFEKTİ --- */
+        #intro {
+            position: fixed; inset: 0; background: #000; z-index: 5000;
+            display: flex; align-items: center; justify-content: center; transition: 1s ease-in-out;
         }
+        .intro-logo {
+            font-size: 70px; font-weight: 900; color: #fff;
+            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+            animation: zoomFade 2s ease-in-out forwards;
+        }
+        @keyframes zoomFade {
+            0% { transform: scale(0.5); opacity: 0; letter-spacing: -10px; }
+            50% { transform: scale(1.1); opacity: 1; letter-spacing: 10px; }
+            100% { transform: scale(1); opacity: 0; letter-spacing: 5px; }
+        }
+        .hide-intro { opacity: 0; visibility: hidden; pointer-events: none; }
 
         /* NAVBAR & MOBİL ARAMA */
-        .nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px);
-            position: fixed; top: 0; width: 100%; z-index: 2000; box-sizing: border-box;
-            border-bottom: 1px solid var(--accent);
+        .nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 15px; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); 
+            position: fixed; top: 0; width: 100%; z-index: 2000; box-sizing: border-box; 
+            border-bottom: 1px solid var(--accent); 
         }
-        .logo { font-size: 26px; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--accent); cursor: pointer; }
-        .search-trigger { font-size: 20px; color: white; background: none; border: none; cursor: pointer; }
+        .logo { font-size: 26px; font-weight: 900; text-shadow: 0 0 15px var(--accent); color: white; text-decoration: none; }
+        .search-trigger { font-size: 20px; background: none; border: none; color: white; cursor: pointer; }
 
-        #search-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
-            background: rgba(0,0,0,0.95); z-index: 2001; display: none; align-items: center;
-            padding: 0 15px; box-sizing: border-box; border-bottom: 2px solid var(--accent);
+        #search-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px; 
+            background: rgba(0,0,0,0.95); z-index: 2001; display: none; align-items: center; 
+            padding: 0 15px; box-sizing: border-box; border-bottom: 2px solid var(--accent); 
         }
-        #search-overlay input { flex-grow: 1; background: #1a1a1a; border: none; color: white; padding: 10px; border-radius: 5px; outline: none; }
+        #search-overlay input { flex-grow: 1; background: #1a1a1a; border: none; color: white; padding: 10px; border-radius: 5px; outline: none; border: 1px solid transparent; }
+        #search-overlay input:focus { border-color: var(--accent); }
 
-        .wrapper { margin-top: 80px; padding: 15px; }
+        .wrapper { margin-top: 85px; padding: 15px; }
 
-        /* DEV OYNATICI (PLAYER) */
-        #player-panel {
-            display: none; background: #000; border-radius: 20px; padding: 10px;
-            border: 2px solid var(--accent); margin-bottom: 30px;
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.2); animation: slideIn 0.6s ease;
+        /* VİDEO PLAYER PANELİ */
+        #player-panel { 
+            display: none; background: #000; border-radius: 20px; padding: 12px; 
+            border: 2px solid var(--accent); margin-bottom: 30px; 
+            box-shadow: 0 0 35px rgba(0, 242, 255, 0.25); 
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .video-box { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 15px; overflow: hidden; background: #000; }
+        .video-box { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 15px; overflow: hidden; background: #050505; }
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
         /* SEZON & BÖLÜM SEÇİCİ */
-        .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
-        .tab-btn { background: #222; border: 1px solid var(--accent); color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-        .tab-btn.active { background: var(--accent); color: #000; font-weight: bold; }
+        .tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--accent); color: white; 
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; white-space: nowrap; transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--accent); color: #000; font-weight: 900; box-shadow: 0 0 15px var(--accent); }
         
-        .ep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-        .ep-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        .ep-btn:hover { background: var(--accent); color: black; font-weight: bold; transform: scale(1.05); }
+        .ep-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; 
+            margin-top: 15px; max-height: 280px; overflow-y: auto; padding-right: 5px; 
+        }
+        .ep-btn { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
+            color: white; padding: 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: 0.2s;
+        }
+        .ep-btn.active { background: #ff0055; color: white; border-color: #ff0055; box-shadow: 0 0 15px #ff0055; }
 
         /* KATALOG */
-        .title { font-size: 22px; margin: 30px 0 15px; border-left: 5px solid var(--accent); padding-left: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-        .card { background: #111; border-radius: 15px; overflow: hidden; border: 1px solid #222; cursor: pointer; transition: 0.4s; }
-        .card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .title { font-size: 22px; margin: 30px 0 15px; border-left: 5px solid var(--accent); padding-left: 15px; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .card { background: #111; border-radius: 18px; overflow: hidden; border: 1px solid #222; cursor: pointer; transition: 0.4s; }
+        .card:hover { border-color: var(--accent); transform: scale(1.03); }
         .card img { width: 100%; height: 240px; object-fit: cover; }
-        .card-name { padding: 10px; text-align: center; font-weight: bold; font-size: 14px; color: var(--accent); }
+        .card-name { padding: 12px; text-align: center; color: var(--accent); font-weight: bold; font-size: 15px; }
     </style>
 </head>
 <body>
 
+    <div id="intro"><div class="intro-logo">NEZO</div></div>
+
     <div id="search-overlay">
-        <input type="text" id="searchInput" placeholder="Dizi ara..." onkeyup="doSearch()">
-        <button onclick="toggleSearch()" style="background:none; border:none; color:white; margin-left:10px;">Kapat</button>
+        <input type="text" id="searchInput" placeholder="Dizi veya film ara..." onkeyup="doSearch()">
+        <button onclick="toggleSearch()" style="background:none; border:none; color:white; margin-left:15px; font-weight:bold;">Kapat</button>
     </div>
 
     <nav class="nav">
-        <div class="logo">NEZO</div>
+        <a href="#" class="logo">NEZO</a>
         <button class="search-trigger" onclick="toggleSearch()">🔍</button>
     </nav>
 
     <div class="wrapper">
         <div id="player-panel">
-            <h2 id="cur-title" style="margin: 0 0 15px 0; color: var(--accent); font-size: 18px;">Video Seçin</h2>
+            <h2 id="cur-title" style="margin: 0 0 15px 0; color: var(--accent); font-size: 18px; text-transform: uppercase;">Seçim Yapın</h2>
             <div class="video-box">
                 <iframe id="nezo-frame" allowfullscreen src=""></iframe>
             </div>
@@ -87,40 +109,54 @@
             <div id="e-grid" class="ep-grid"></div>
         </div>
 
-        <div class="title">TRENDLER</div>
+        <div class="title">TREND YAYINLAR</div>
         <div id="main-grid" class="grid"></div>
     </div>
 
     <script>
-        // LİNK VERİTABANI
+        // VİDEO VERİSİ
         const episodeLinks = {
             "bl_s2_e1": "https://animecix.tv/titles/82/bleach/season/2/episode/1"
         };
 
-        const seriesDb = [
-            { id: 'bl', t: 'Bleach', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/367Tf0G5XJvV8M2K2M6fK6fG6fG.jpg', seasons: [366, 26] },
-            { id: 'pb', t: 'Prison Break', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/u9Y6G5f9B5T7H0o8Xo0lY7oX6nS.jpg', seasons: [22, 22, 22] }
+        // DİZİ VERİTABANI
+        const db = [
+            { 
+                id: 'bl', 
+                t: 'Bleach', 
+                img: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/367Tf0G5XJvV8M2K2M6fK6fG6fG.jpg', 
+                seasons: [366, 26] // Sezon 1: 366 Bölüm, Sezon 2: 26 Bölüm
+            },
+            { 
+                id: 'pb', 
+                t: 'Prison Break', 
+                img: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2/u9Y6G5f9B5T7H0o8Xo0lY7oX6nS.jpg', 
+                seasons: [22, 22, 22, 24, 9] 
+            }
         ];
 
         function init() {
+            // Intro'yu 2 saniye sonra kaldır
+            setTimeout(() => {
+                document.getElementById('intro').classList.add('hide-intro');
+            }, 2000);
+
             const grid = document.getElementById('main-grid');
-            seriesDb.forEach(s => {
+            db.forEach(m => {
                 grid.innerHTML += `
-                    <div class="card" onclick="openShow('${s.id}')" data-name="${s.t.toLowerCase()}">
-                        <img src="${s.img}">
-                        <div class="card-name">${s.t}</div>
+                    <div class="card" onclick="openShow('${m.id}')" data-name="${m.t.toLowerCase()}">
+                        <img src="${m.img}">
+                        <div class="card-name">${m.t}</div>
                     </div>`;
             });
         }
 
         function openShow(id) {
-            const item = seriesDb.find(x => x.id === id);
+            const item = db.find(x => x.id === id);
             document.getElementById('player-panel').style.display = 'block';
-            document.getElementById('cur-title').innerText = item.t;
-            
             const tabs = document.getElementById('s-tabs');
             tabs.innerHTML = '';
-            item.seasons.forEach((count, i) => {
+            item.seasons.forEach((_, i) => {
                 tabs.innerHTML += `<button class="tab-btn" onclick="loadEps('${id}', ${i})">Sezon ${i+1}</button>`;
             });
             loadEps(id, 0);
@@ -128,7 +164,10 @@
         }
 
         function loadEps(id, sIdx) {
-            const item = seriesDb.find(x => x.id === id);
+            const item = db.find(x => x.id === id);
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                if(i === sIdx) b.classList.add('active'); else b.classList.remove('active');
+            });
             const grid = document.getElementById('e-grid');
             grid.innerHTML = '';
             for(let i=1; i<=item.seasons[sIdx]; i++) {
@@ -139,19 +178,26 @@
         function watch(id, s, e) {
             const frame = document.getElementById('nezo-frame');
             const key = `${id}_s${s}_e${e}`;
-            document.getElementById('cur-title').innerText = `Oynatılıyor: Sezon ${s} Bölüm ${e}`;
+            const item = db.find(x => x.id === id);
+            document.getElementById('cur-title').innerText = `${item.t} - S${s} B${e}`;
             
+            document.querySelectorAll('.ep-btn').forEach(btn => {
+                if(btn.innerText === `Bölüm ${e}`) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
             if(episodeLinks[key]) {
                 frame.src = episodeLinks[key];
             } else {
-                alert("Bu bölümün linki henüz eklenmedi. Lütfen bana gönder!");
-                frame.src = "about:blank";
+                frame.src = "";
+                alert("Bu bölümün linki henüz sisteme eklenmedi!");
             }
         }
 
         function toggleSearch() {
             const box = document.getElementById('search-overlay');
             box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+            if(box.style.display === 'flex') document.getElementById('searchInput').focus();
         }
 
         function doSearch() {
