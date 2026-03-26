@@ -3,8 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>NEZO | İzlemeye Başla</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0f0f0f; color: white; font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; }
+        .navbar { display: flex; justify-content: space-between; padding: 15px 40px; background: #000; align-items: center; border-bottom: 2px solid #E50914; }
+        .logo { color: #E50914; font-size: 28px; font-weight: bold; text-transform: uppercase; }
+        .search-bar input { background: #333; border: none; padding: 10px; color: white; border-radius: 20px; width: 250px; }
+
+        .main-content { display: flex; flex-direction: row; padding: 20px; gap: 20px; flex-wrap: wrap; }
+        .video-section { flex: 3; min-width: 300px; }
+        .player-container { background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        video { width: 100%; aspect-ratio: 16/9; outline: none; }
+
+        .episodes-sidebar { flex: 1; background: #1a1a1a; padding: 20px; border-radius: 8px; min-width: 250px; height: fit-content; }
+        .series-select { margin-bottom: 20px; display: flex; gap: 10px; }
+        .series-select button { background: #333; border: 1px solid #444; color: white; padding: 10px 15px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .series-select button:hover { background: #E50914; border-color: #E50914; }
+        
+        h3 { border-bottom: 1px solid #333; padding-bottom: 10px; color: #E50914; }
+        #episode-list { list-style: none; padding: 0; margin-top: 10px; }
+        #episode-list li { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; border-radius: 4px; }
+        #episode-list li:hover { background: #E50914; color: white; font-weight: bold; }
+        
+        .video-description { margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 8px; }
+        
+        @media (max-width: 768px) { .main-content { flex-direction: column; } }
+    </style>
 </head>
 <body>
 
@@ -15,69 +38,64 @@
 
 <div class="main-content">
     <div class="video-section">
-        <h2 id="current-title">Bleach - Sezon 1 Bölüm 1</h2>
+        <h2 id="current-title">Yükleniyor...</h2>
         <div class="player-container">
             <video id="nezoPlayer" controls crossorigin="anonymous">
-                <source src="bleach-s1-b1.mp4" type="video/mp4">
-                <track label="Türkçe" kind="subtitles" srclang="tr" src="altyazi-tr.vtt" default>
+                <source id="videoSource" src="" type="video/mp4">
+                Tarayıcınız video oynatmayı desteklemiyor.
             </video>
         </div>
         <div class="video-description">
-            <p><strong>Dizi Özeti:</strong> <span id="summary">Ichigo Kurosaki'nin hikayesi burada başlıyor.</span></p>
+            <p><strong>Dizi Özeti:</strong> <span id="summary">Seçtiğiniz bölümün özeti burada görünecek.</span></p>
         </div>
     </div>
 
     <div class="episodes-sidebar">
-        <h3>Bölümler</h3>
+        <h3>Dizi Seç</h3>
         <div class="series-select">
             <button onclick="changeSeries('Bleach')">Bleach</button>
             <button onclick="changeSeries('Prison Break')">Prison Break</button>
         </div>
-        <ul id="episode-list">
-            </ul>
+        <h3>Bölümler</h3>
+        <ul id="episode-list"></ul>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+    const seriesData = {
+        'Bleach': {
+            summary: "Ichigo Kurosaki'nin Soul Reaper dünyasındaki maceraları.",
+            episodes: ['Sezon 1 Bölüm 1', 'Sezon 1 Bölüm 2', 'Sezon 1 Bölüm 3', 'Sezon 1 Bölüm 4']
+        },
+        'Prison Break': {
+            summary: "Michael Scofield, haksız yere hapse giren abisini kurtarmak için kaçış planı yapar.",
+            episodes: ['Sezon 1 Bölüm 1', 'Sezon 1 Bölüm 2', 'Sezon 1 Bölüm 3']
+        }
+    };
+
+    function changeSeries(name) {
+        const list = document.getElementById('episode-list');
+        const summary = document.getElementById('summary');
+        list.innerHTML = ''; 
+        
+        summary.innerText = seriesData[name].summary;
+        
+        seriesData[name].episodes.forEach(ep => {
+            let li = document.createElement('li');
+            li.innerText = ep;
+            li.onclick = () => {
+                document.getElementById('current-title').innerText = name + " - " + ep;
+                // ÖNEMLİ: Videonun çalışması için MP4 linkini aşağıya eklemelisin
+                // Örnek: document.getElementById('nezoPlayer').src = "link_buraya.mp4";
+                alert(name + " " + ep + " açılıyor! (Not: Video linki eklemeyi unutma)");
+            };
+            list.appendChild(li);
+        });
+    }
+
+    // İlk açılışta Bleach gelsin
+    window.onload = () => changeSeries('Bleach');
+</script>
+
 </body>
 </html>
-body { background-color: #0f0f0f; color: white; font-family: sans-serif; margin: 0; }
-.navbar { display: flex; justify-content: space-between; padding: 15px 40px; background: #000; align-items: center; }
-.logo { color: #E50914; font-size: 28px; font-weight: bold; }
-.search-bar input { background: #333; border: none; padding: 8px; color: white; border-radius: 4px; }
-
-.main-content { display: flex; padding: 20px; gap: 20px; }
-.video-section { flex: 3; }
-.player-container { background: #000; border: 2px solid #333; border-radius: 8px; overflow: hidden; }
-video { width: 100%; aspect-ratio: 16/9; }
-
-.episodes-sidebar { flex: 1; background: #1a1a1a; padding: 15px; border-radius: 8px; max-height: 80vh; overflow-y: auto; }
-.series-select { margin-bottom: 15px; display: flex; gap: 10px; }
-.series-select button { background: #E50914; border: none; color: white; padding: 8px; cursor: pointer; border-radius: 4px; }
-
-#episode-list { list-style: none; padding: 0; }
-#episode-list li { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; transition: 0.2s; }
-#episode-list li:hover { background: #333; color: #E50914; }
-const episodes = {
-    'Bleach': ['Sezon 1 Bölüm 1', 'Sezon 1 Bölüm 2', 'Sezon 1 Bölüm 3'],
-    'Prison Break': ['Sezon 1 Bölüm 1', 'Sezon 1 Bölüm 2', 'Sezon 1 Bölüm 3']
-};
-
-function changeSeries(name) {
-    const list = document.getElementById('episode-list');
-    list.innerHTML = ''; // Temizle
-    episodes[name].forEach(ep => {
-        let li = document.createElement('li');
-        li.innerText = ep;
-        li.onclick = () => {
-            document.getElementById('current-title').innerText = name + " - " + ep;
-            // Burada video kaynağını değiştirebilirsin:
-            // document.getElementById('nezoPlayer').src = name + "-" + ep + ".mp4";
-            alert(ep + " yükleniyor...");
-        };
-        list.appendChild(li);
-    });
-}
-
-// Sayfa açıldığında Bleach bölümlerini getir
-changeSeries('Bleach');
