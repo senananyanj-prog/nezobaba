@@ -3,312 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEZO | Dijital Film Platformu</title>
+    <title>NEZO | Digital Universe</title>
     <style>
         :root {
-            --main-red: #E50914; /* Netflix Kırmızısı */
-            --bg-black: #080808;
-            --sidebar-bg: #141414;
-            --text-white: #e5e5e5;
+            --accent: #00f2ff; /* Neon Mavi */
+            --main-red: #ff0055; /* Canlı Pembe-Kırmızı */
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            background-color: var(--bg-black);
-            color: var(--text-white);
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* --- 2. MODERNE NEZO LOGOSU VE NAVBAR --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.8);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            box-sizing: border-box;
-            border-bottom: 2px solid #222;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Yeni Logo Tasarımı: Metin ve İkon */
-        .nezo-icon {
-            color: var(--main-red);
-            font-size: 28px;
-            font-weight: bold;
-            margin-right: 5px;
-            transform: skew(-10deg);
-        }
-
-        .nezo-text {
-            color: var(--main-red);
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .search-bar input {
-            background: #333;
-            border: none;
-            padding: 8px 15px;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
             color: white;
-            border-radius: 20px;
-            width: 150px;
-            transition: 0.3s;
-        }
-
-        .search-bar input:focus {
-            width: 200px;
-            outline: none;
-            background: #444;
-        }
-
-        /* --- 3. MAİN CONTENT & PLATER --- */
-        .main-container {
-            margin-top: 70px; /* Navbar için boşluk */
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            flex-grow: 1;
-        }
-
-        .player-section {
-            width: 100%;
-            margin-bottom: 30px;
-            display: none; /* Başlangıçta gizli, film seçilince açılacak */
-        }
-
-        .player-container {
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            position: relative;
-        }
-
-        video {
-            width: 100%;
-            aspect-ratio: 16/9;
-            outline: none;
-            border: 2px solid #222;
-            border-radius: 8px;
-        }
-        
-        #current-info {
-            padding: 10px;
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        
-        #current-title {
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            color: var(--main-red);
-            font-size: 1.5rem;
+            overflow-x: hidden;
         }
+
+        /* --- ÖZGÜN NEZO INTRO --- */
+        #nezo-intro {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: flex; align-items: center; justify-content: center;
+            z-index: 2000; transition: 1s ease-in-out;
+        }
+        .ring {
+            width: 150px; height: 150px; border: 3px solid transparent;
+            border-top: 3px solid var(--accent); border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            position: absolute;
+        }
+        .intro-text {
+            font-size: 50px; font-weight: 900; letter-spacing: 10px;
+            background: linear-gradient(45deg, var(--main-red), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out forwards;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0; letter-spacing: 20px; }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; letter-spacing: 5px; }
+        }
+        .fade-away { opacity: 0; visibility: hidden; }
+
+        /* --- MODERN NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; background: var(--glass);
+            backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%;
+            z-index: 1000; box-sizing: border-box; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo-text {
+            font-size: 30px; font-weight: bold; background: linear-gradient(to right, var(--main-red), #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* --- PLAYER --- */
+        .content-wrap { margin-top: 100px; padding: 20px; }
+        #player-box { 
+            display: none; background: var(--glass); border-radius: 20px;
+            padding: 10px; border: 1px solid rgba(0, 242, 255, 0.3);
+            margin-bottom: 40px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+        }
+        video { width: 100%; border-radius: 15px; }
+
+        /* --- ÖZGÜN KATALOG TASARIMI --- */
+        .section-title { 
+            font-size: 24px; margin: 30px 0 15px; display: flex; align-items: center;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .section-title::before {
+            content: ""; width: 5px; height: 25px; background: var(--accent);
+            margin-right: 15px; border-radius: 5px; box-shadow: 0 0 10px var(--accent);
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         
-        #current-summary {
-            margin: 5px 0 0 0;
-            color: #ccc;
-            font-size: 0.9rem;
+        .nezo-card {
+            position: relative; border-radius: 15px; overflow: hidden;
+            background: #111; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid transparent;
+        }
+        .nezo-card:hover {
+            transform: translateY(-10px); border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(0, 242, 255, 0.2);
+        }
+        .nezo-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; }
+        .nezo-card:hover img { filter: brightness(0.4) blur(2px); }
+        
+        .card-info {
+            position: absolute; bottom: -50px; left: 0; width: 100%;
+            padding: 15px; background: linear-gradient(transparent, #000);
+            transition: 0.3s; opacity: 0; box-sizing: border-box;
+        }
+        .nezo-card:hover .card-info { bottom: 0; opacity: 1; }
+        .play-btn {
+            background: var(--accent); color: #000; border: none;
+            padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer;
         }
 
-        /* --- 1. & 4. FİLM KAPAKLARI VE KATALOG --- */
-        .catalog-section {
-            width: 100%;
-        }
-
-        .category {
-            margin-bottom: 40px;
-        }
-
-        .category-title {
-            font-size: 1.8rem;
-            color: var(--main-red);
-            margin-bottom: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        .movie-card {
-            background: var(--sidebar-bg);
-            border-radius: 6px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .movie-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .movie-card img {
-            width: 100%;
-            height: 200px; /* Sabit yükseklik, mobilde düzgün durması için */
-            object-fit: cover; /* Resmi sığdırır */
-        }
-
-        .movie-card h4 {
-            margin: 0;
-            padding: 8px;
-            font-size: 0.9rem;
-            text-align: center;
-            color: var(--text-white);
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        /* Mobil İçin Ekran Boyutu Düzenlemeleri */
-        @media (min-width: 768px) {
-            .main-container {
-                flex-direction: row-reverse;
-                gap: 20px;
-            }
-            
-            .player-section {
-                flex: 2;
-                max-width: 800px;
-            }
-            
-            .catalog-section {
-                flex: 3;
-            }
-
-            .movie-grid {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
-            
-            .movie-card img {
-                height: 270px;
-            }
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .navbar { padding: 15px; }
+            .logo-text { font-size: 22px; }
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="logo-container">
-        <span class="nezo-icon">N</span>
-        <span class="nezo-text">NEZO</span>
-    </div>
-    <div class="search-bar"><input type="text" placeholder="Dizi, film ara..."></div>
-</nav>
-
-<div class="main-container">
-    
-    <div class="player-section" id="playerSection">
-        <div id="current-info">
-            <h2 id="current-title">Film Başlığı</h2>
-            <p id="current-summary">Film özeti buraya gelecek.</p>
-        </div>
-        <div class="player-container">
-            <video id="nezoPlayer" controls crossorigin="anonymous">
-                <source id="videoSource" src="" type="video/mp4">
-                Tarayıcınız video oynatmayı desteklemiyor.
-            </video>
-        </div>
+    <div id="nezo-intro">
+        <div class="ring"></div>
+        <div class="intro-text">NEZO</div>
     </div>
 
-    <div class="catalog-section">
-        
-        <div class="category">
-            <h3 class="category-title">Popüler Dizi & Filmler</h3>
-            <div class="movie-grid">
-                <div class="movie-card" onclick="loadVideo('Prison Break', 'https://www.w3schools.com/html/mov_bbb.mp4', 'Michael Scofield, haksız yere hapse giren abisini kurtarmak için kaçış planı yapar.')">
-                    <img src="https://image.tmdb.org/t/p/w500/i9FpL2rV30zP9Wb6v7kC4b6S34g.jpg" alt="Prison Break Poster">
-                    <h4>Prison Break</h4>
-                </div>
-                <div class="movie-card" onclick="loadVideo('Bleach', 'https://www.w3schools.com/html/movie.mp4', 'Ichigo Kurosaki\'nin Soul Reaper dünyasındaki maceraları.')">
-                    <img src="https://image.tmdb.org/t/p/w500/z6Dms8j1O9yM3Q2C6J7tVwH9v2Y.jpg" alt="Bleach Poster">
-                    <h4>Bleach</h4>
-                </div>
-                <div class="movie-card" onclick="loadVideo('Breaking Bad', '', 'Bir kimya öğretmeninin uyuşturucu dünyasına girişi.')">
-                    <img src="https://image.tmdb.org/t/p/w500/ztY5UiswzG8uVjP4uKk3UjA0fF1.jpg" alt="Breaking Bad Poster">
-                    <h4>Breaking Bad</h4>
-                </div>
-                <div class="movie-card" onclick="loadVideo('Interstellar', '', 'Yıldızlararası yolculuk yapan bir grup astronotun hikayesi.')">
-                    <img src="https://image.tmdb.org/t/p/w500/gEU2Qni467InY85h6fD5E4l1H6g.jpg" alt="Interstellar Poster">
-                    <h4>Interstellar</h4>
-                </div>
-            </div>
+    <nav class="navbar">
+        <div class="logo-text">NEZO</div>
+        <div style="font-size: 0.8rem; color: var(--accent);">PREMIUM UNIVERSE</div>
+    </nav>
+
+    <div class="content-wrap">
+        <div id="player-box">
+            <h2 id="p-title" style="margin-top:0; color: var(--accent);"></h2>
+            <video id="v-player" controls></video>
         </div>
 
-        <div class="category">
-            <h3 class="category-title">Korku Filmleri 🎃</h3>
-            <div class="movie-grid">
-                <div class="movie-card" onclick="loadVideo('The Conjuring', '', 'Paranormal olayları inceleyen bir çiftin hikayesi.')">
-                    <img src="https://image.tmdb.org/t/p/w500/wS4kH5G0VzD6iE1T9U0p6S5mF7G.jpg" alt="Conjuring Poster">
-                    <h4>The Conjuring</h4>
-                </div>
-                <div class="movie-card" onclick="loadVideo('IT', '', 'Palyaço Pennywise\'ın dehşeti.')">
-                    <img src="https://image.tmdb.org/t/p/w500/9E2D8hM52O2Z7r1t9H1E7k2N4p9.jpg" alt="IT Poster">
-                    <h4>IT</h4>
-                </div>
-                <div class="movie-card" onclick="loadVideo('A Quiet Place', '', 'Sessiz kalmak zorunda kalan bir ailenin hayatta kalma mücadelesi.')">
-                    <img src="https://image.tmdb.org/t/p/w500/yvOOp9Q4U5Y5M6v8Wf6Kj3Z4D1F.jpg" alt="A Quiet Place Poster">
-                    <h4>A Quiet Place</h4>
-                </div>
-            </div>
-        </div>
+        <div class="section-title">Trendler</div>
+        <div class="grid" id="popular-grid"></div>
 
+        <div class="section-title">Karanlık Oda</div>
+        <div class="grid" id="horror-grid"></div>
     </div>
-</div>
 
-<script>
-    // --- 2. VİDEOLARI AÇMAK İÇİN KOD GÜNCELLEMESİ ---
-    function loadVideo(title, videoUrl, summary) {
-        // Elementleri Bul
-        const playerSection = document.getElementById('playerSection');
-        const player = document.getElementById('nezoPlayer');
-        const currentTitle = document.getElementById('current-title');
-        const currentSummary = document.getElementById('current-summary');
+    <script>
+        // Film Verileri
+        const movies = {
+            popular: [
+                { t: 'Prison Break', d: 'Kaçış sanatı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/u9Y6G5f9B5T7H0o8Xo0lY7oX6nS.jpg', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { t: 'Bleach', d: 'Ruhların savaşı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/367Tf0G5XJvV8M2K2M6fK6fG6fG.jpg', url: 'https://www.w3schools.com/html/movie.mp4' },
+                { t: 'The Witcher', d: 'Canavar avcısı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7vUveX54CgU1q6Cq74q3G3Fm6F1.jpg', url: '' }
+            ],
+            horror: [
+                { t: 'The Conjuring', d: 'Korku seansı.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/wS4kH5G0VzD6iE1T9U0p6S5mF7G.jpg', url: '' },
+                { t: 'IT', d: 'O geri döndü.', img: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9E2D8hM52O2Z7r1t9H1E7k2N4p9.jpg', url: '' }
+            ]
+        };
 
-        // Oynatıcı Alanını Görünür Yap (Mobilde en üste çıkacak)
-        playerSection.style.display = 'block';
-
-        // Bilgileri ve Video Kaynağını Güncelle
-        currentTitle.innerText = title;
-        currentSummary.innerText = summary;
-        player.src = videoUrl;
-
-        // Otomatik Oynatmayı Dene (Bazı tarayıcılar engeller)
-        player.play().catch(e => {
-            console.log("Oynatma tarayıcı tarafından engellendi. Kullanıcı 'oynat' tuşuna basmalı.");
-        });
-
-        // Mobilde izlerken sayfanın en üstüne (Oynatıcıya) kaydır
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Arama Çubuğu (Şimdilik sembolik)
-    const searchInput = document.querySelector('.search-bar input');
-    searchInput.addEventListener('keyup', (e) => {
-        if(e.key === 'Enter') {
-            alert('Arama çalışıyor... (Yakında: "' + searchInput.value + '" aranacak.)');
+        // Katalog Oluşturma
+        function createGrid(data, containerId) {
+            const container = document.getElementById(containerId);
+            data.forEach(m => {
+                container.innerHTML += `
+                    <div class="nezo-card" onclick="startPlay('${m.t}', '${m.url}')">
+                        <img src="${m.img}" alt="${m.t}">
+                        <div class="card-info">
+                            <div style="font-weight:bold; margin-bottom:5px;">${m.t}</div>
+                            <button class="play-btn">İzle</button>
+                        </div>
+                    </div>
+                `;
+            });
         }
-    });
-</script>
 
+        function startPlay(title, url) {
+            if(!url) return alert("Bu içerik yakında eklenecek!");
+            document.getElementById('player-box').style.display = 'block';
+            document.getElementById('p-title').innerText = title;
+            const v = document.getElementById('v-player');
+            v.src = url;
+            v.play();
+            window.scrollTo({top: 80, behavior: 'smooth'});
+        }
+
+        // Başlangıç
+        window.onload = () => {
+            createGrid(movies.popular, 'popular-grid');
+            createGrid(movies.horror, 'horror-grid');
+            
+            setTimeout(() => {
+                document.getElementById('nezo-intro').classList.add('fade-away');
+            }, 3500);
+        };
+    </script>
 </body>
 </html>
